@@ -1,12 +1,12 @@
 import { NativeTabs } from 'expo-router/native-tabs';
 import { colors } from '@/theme';
 
-const progressBarOutline = require('@/assets/images/progressBar/progress.png');
-const progressBarFilled = require('@/assets/images/progressBar/progress-filled.png');
-const timerOutline = require('@/assets/images/timer/timer-outline.png');
-const timerFilled = require('@/assets/images/timer/timer-filled.png');
-const settingsOutline = require('@/assets/images/settings/settings-outline.png');
-const settingsFilled = require('@/assets/images/settings/settings-filled.png');
+const progressBarOutline = require('@/assets/images/tabs/progress.png');
+const progressBarFilled = require('@/assets/images/tabs/progress-filled.png');
+const timerOutline = require('@/assets/images/tabs/timer-outline.png');
+const timerFilled = require('@/assets/images/tabs/timer-filled.png');
+const settingsOutline = require('@/assets/tabs/settings/settings-outline.png');
+const settingsFilled = require('@/assets/tabs/settings/settings-filled.png');
 
 
 export default function AppTabs() {
