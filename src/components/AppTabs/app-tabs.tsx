@@ -5,8 +5,8 @@ const progressBarOutline = require('@/assets/images/tabs/progress.png');
 const progressBarFilled = require('@/assets/images/tabs/progress-filled.png');
 const timerOutline = require('@/assets/images/tabs/timer-outline.png');
 const timerFilled = require('@/assets/images/tabs/timer-filled.png');
-const settingsOutline = require('@/assets/tabs/settings/settings-outline.png');
-const settingsFilled = require('@/assets/tabs/settings/settings-filled.png');
+const settingsOutline = require('@/assets/images/tabs/settings-outline.png');
+const settingsFilled = require('@/assets/images/tabs/settings-filled.png');
 
 
 export default function AppTabs() {
