@@ -1,6 +1,9 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
+import { loadJSON, saveJSON } from "@/storage/storage";
 import type { Session } from "@/types/session";
+
+const STORAGE_KEY = 'sessions';
 
 type AppData = {
     sessions: Session[];
@@ -11,7 +14,22 @@ const AppDataContext = createContext<AppData | null>(null);
 
 export function AppDataProvider({ children }: {children: ReactNode}) {
     const [sessions, setSessions] = useState<Session[]>([]);
+    const [isLoaded, setIsLoaded] = useState(false);
 
+    useEffect(() => {
+        loadJSON<Session[]>(STORAGE_KEY, []).then((saved) => {
+            setSessions(saved);
+            setIsLoaded(true);
+        });
+    }, []);
+
+
+    useEffect(() => {
+        if (!isLoaded) return;
+        saveJSON(STORAGE_KEY, sessions);
+    }, [sessions, isLoaded]);
+
+    
     function addSession(session: Session) {
         setSessions((prev) => [...prev, session]);
     }
