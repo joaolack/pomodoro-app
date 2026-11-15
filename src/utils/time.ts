@@ -27,6 +27,30 @@ export function getNextMode(
     return 'shortBreak';   
 }
 
+const MODE_LABELS: Record<SessionType, string> = {
+    focus: 'Foco',
+    shortBreak: 'Pausa curta',
+    longBreak: 'Pausa longa',
+};
+
+export function getModeLabel(mode: SessionType): string {
+    return MODE_LABELS[mode];
+}
+
+export function getCycleProgress(
+    mode: SessionType,
+    completedFocus: number,
+    sessionsUntilLongBreak: number,
+): number {
+    const doneInCycle = completedFocus % sessionsUntilLongBreak;
+
+    if (mode === 'longBreak' && completedFocus > 0 && doneInCycle === 0) {
+        return sessionsUntilLongBreak;
+    }
+
+    return doneInCycle;
+}
+
 export function getModeMinutes(mode: SessionType, settings: Settings): number {
     switch (mode) {
         case 'focus':

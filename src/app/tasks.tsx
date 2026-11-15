@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
@@ -5,6 +6,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Button } from '@/components/Button';
 import { TaskCard } from '@/components/TaskCard';
 import { TextField } from '@/components/TextField';
+import { MASCOT } from '@/constants/mascot';
 import { useAppData } from '@/context/app-data';
 import { colors, spacing } from '@/theme';
 import { TASK_TITLE_MAX_LENGTH, validateTaskTitle } from '@/utils/tasks';
@@ -65,7 +67,10 @@ export default function TasksScreen() {
                     />
                 )}
                 ListEmptyComponent={
-                    <Text style={styles.empty}>Nenhuma tarefa ainda. Adicione a primeira acima.</Text>
+                    <View style={styles.emptyState}>
+                        <Image source={MASCOT.hello} style={styles.emptyMascot} contentFit="contain" accessible={false} />
+                        <Text style={styles.empty}>Oi! Nenhuma tarefa ainda. Adicione a primeira acima.</Text>
+                    </View>
                 }
             />
         </View>
@@ -86,9 +91,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: spacing.lg,
         paddingBottom: spacing.xl,
     },
+    emptyState: {
+        alignItems: 'center',
+        gap: spacing.md,
+        marginTop: spacing.lg,
+    },
+    emptyMascot: {
+        width: 160,
+        height: 160,
+    },
     empty: {
         textAlign: 'center',
         color: colors.textMuted,
-        marginTop: spacing.xl,
     },
 });

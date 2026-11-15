@@ -1,11 +1,9 @@
 import type { Settings } from '@/types/settings';
 
 export type SettingsKey = keyof Settings;
-
-/** What the user typed in each field (TextInput always gives text). */
 export type SettingsForm = Record<SettingsKey, string>;
 
-/** One error message per field; a field with no error is left out. */
+
 export type SettingsErrors = Partial<Record<SettingsKey, string>>;
 
 export const SETTINGS_LIMITS: Record<SettingsKey, { min: number; max: number }> = {
