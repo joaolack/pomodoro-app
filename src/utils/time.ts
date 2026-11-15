@@ -1,5 +1,7 @@
-import { DEFAULT_SETTINGS } from "@/constants/defaults";
 import type { SessionType } from "@/types/session";
+import type { Settings } from "@/types/settings";
+
+const MS_PER_MINUTE = 60 * 1000;
 
 export function formatTime(ms: number): string {
     const totalSeconds = Math.ceil(ms / 1000);
@@ -25,15 +27,17 @@ export function getNextMode(
     return 'shortBreak';   
 }
 
-export function getModeDurationMs(mode: SessionType): number {
-    const MS_PER_MINUTE = 60 * 1000;
-
+export function getModeMinutes(mode: SessionType, settings: Settings): number {
     switch (mode) {
         case 'focus':
-            return DEFAULT_SETTINGS.focusMinutes * MS_PER_MINUTE;
+            return settings.focusMinutes;
         case 'shortBreak':
-            return DEFAULT_SETTINGS.shortBreakMinutes * MS_PER_MINUTE;
+            return settings.shortBreakMinutes;
         case 'longBreak':
-            return DEFAULT_SETTINGS.longBreakMinutes * MS_PER_MINUTE;
+            return settings.longBreakMinutes;
     }
+}
+
+export function getModeDurationMs(mode: SessionType, settings: Settings): number {
+    return getModeMinutes(mode, settings) * MS_PER_MINUTE;
 }

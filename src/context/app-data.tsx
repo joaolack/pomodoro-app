@@ -1,15 +1,19 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
+import { DEFAULT_SETTINGS } from "@/constants/defaults";
 import { loadJSON, saveJSON } from "@/storage/storage";
 import type { Session } from "@/types/session";
+import type { Settings } from "@/types/settings";
 import type { Task } from "@/types/task";
 
 const STORAGE_KEYS = {
     sessions: 'sessions',
-    tasks: 'tasks,'
+    tasks: 'tasks',
+    settings: 'settings',
 };
 
 type AppData = {
+    isLoaded: boolean;
     sessions: Session[];
     addSession: (session: Session) => void;
     tasks: Task[];
@@ -18,6 +22,8 @@ type AppData = {
     removeTask: (id: string) => void;
     selectedTaskId: string | null;
     selectTask: (id: string | null) => void;
+    settings: Settings;
+    updateSettings: (settings: Settings) => void;
 };
 
 const AppDataContext = createContext<AppData | null>(null);
@@ -26,15 +32,18 @@ export function AppDataProvider({ children }: {children: ReactNode}) {
     const [sessions, setSessions] = useState<Session[]>([]);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+    const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         Promise.all([
             loadJSON<Session[]>(STORAGE_KEYS.sessions, []),
             loadJSON<Task[]>(STORAGE_KEYS.tasks, []),
-        ]).then(([savedSessions, savedTasks]) => {
+            loadJSON<Partial<Settings>>(STORAGE_KEYS.settings, {}),
+        ]).then(([savedSessions, savedTasks, savedSettings]) => {
             setSessions(savedSessions);
             setTasks(savedTasks);
+            setSettings({ ...DEFAULT_SETTINGS, ...savedSettings });
             setIsLoaded(true);
         });
     }, []);
@@ -50,6 +59,11 @@ export function AppDataProvider({ children }: {children: ReactNode}) {
         if (!isLoaded) return;
         saveJSON(STORAGE_KEYS.tasks, tasks);
     }, [tasks, isLoaded]);
+
+    useEffect(() => {
+        if (!isLoaded) return;
+        saveJSON(STORAGE_KEYS.settings, settings);
+    }, [settings, isLoaded]);
 
 
     function addSession(session: Session) {
@@ -86,9 +100,14 @@ export function AppDataProvider({ children }: {children: ReactNode}) {
         setSelectedTaskId(id);
     }
 
+    function updateSettings(newSettings: Settings) {
+        setSettings(newSettings);
+    }
+
     return (
         <AppDataContext.Provider
             value={{
+                isLoaded,
                 sessions,
                 addSession,
                 tasks,
@@ -97,6 +116,8 @@ export function AppDataProvider({ children }: {children: ReactNode}) {
                 removeTask,
                 selectedTaskId,
                 selectTask,
+                settings,
+                updateSettings,
             }}
         >
             {children}
