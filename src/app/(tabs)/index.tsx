@@ -1,10 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Link } from 'expo-router';
 
+import { useAppData } from '@/context/app-data';
 import { useTimer } from '@/hooks/use-timer';
 import { formatTime } from '@/utils/time';
 
 export default function TimerScreen() {
   const { mode, status, displayMs, start, pause, reset, skip, completedFocus } = useTimer();
+  const { tasks, selectedTaskId } = useAppData();
+  const selectedTask = tasks.find((task) => task.id === selectedTaskId);
 
   return (
     <View style={styles.container}>
@@ -31,6 +35,10 @@ export default function TimerScreen() {
       >
         <Text>Pular</Text>
       </Pressable>
+
+      <Link href="/tasks">
+        {selectedTask ? `Focando em: ${selectedTask.title} ›` : 'Escolher tarefa ›'}
+      </Link>
 
     </View>
   );

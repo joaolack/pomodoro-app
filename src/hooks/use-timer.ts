@@ -15,7 +15,7 @@ export function useTimer() {
     const [now, setNow] = useState(0);
     const [sessionStartedAt, setSessionStartedAt] = useState<string | null>(null);
 
-    const { addSession } = useAppData();
+    const { addSession, selectedTaskId } = useAppData();
 
     const displayMs =
         status === 'running' && endsAt !== null
@@ -66,6 +66,7 @@ export function useTimer() {
             addSession({
                 id: Date.now().toString(),
                 type: mode,
+                taskId: selectedTaskId ?? undefined,
                 startedAt: sessionStartedAt,
                 durationMinutes: DEFAULT_SETTINGS.focusMinutes,
             });
